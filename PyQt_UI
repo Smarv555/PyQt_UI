@@ -1,0 +1,75 @@
+import sys
+from PyQt5 import QtWidgets as qtw
+from PyQt5 import QtGui as qtg
+from PyQt5 import QtCore as qtc
+
+class MainWindow(qtw.QWidget):
+
+    # Class constructor
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.setup_UI()
+
+        self.leUsername.returnPressed.connect(self.on_text_changed)
+        self.leUsername.returnPressed.connect(self.close)
+        # self.btn_Ok.clicked.connect(self.on_text_changed)
+        # self.btn_Ok.clicked.connect(self.close)
+        self.btn_Cancel.clicked.connect(self.on_close)
+        self.btn_Cancel.clicked.connect(self.close)
+
+        self.show()
+
+    # Create UI
+    def setup_UI(self):
+        self.setWindowTitle('Signals And Slots')
+        self.setGeometry(500, 300, 600, 300)
+
+        self.leUsername = qtw.QLineEdit(self)
+        self.lePassword = qtw.QLineEdit(self)
+
+        self.create_form_groupbox()
+        self.create_buttons()
+
+        # Create main Layout
+        main_layout = qtw.QVBoxLayout(self)
+        main_layout.addWidget(self.form_groupbox)
+        main_layout.addLayout(self.buttons_layout)
+
+    # Create Form Group Box
+    def create_form_groupbox(self):
+        # Create For Group Box
+        self.form_groupbox = qtw.QGroupBox('Login Form')
+        self.form_layout = qtw.QFormLayout(self)
+        self.form_groupbox.setLayout(self.form_layout)
+        self.form_layout.addRow('Name:', self.leUsername)
+        self.form_layout.addRow('Password', self.lePassword)
+
+    # Create Buttons Layout
+    def create_buttons(self):
+        self.buttons_layout = qtw.QHBoxLayout()
+        self.btn_Ok = qtw.QPushButton('OK')
+        self.btn_Cancel = qtw.QPushButton('Cancel')
+        self.buttons_layout.addWidget(self.btn_Ok)
+        self.buttons_layout.addWidget(self.btn_Cancel)
+
+    def on_close(self):
+        print('Close button clicked')
+
+    def on_text_changed(self):
+        global x
+        x = self.leUsername.text()
+
+
+    def on_cursor_changed(self, old, new):
+        print(old, new)
+
+
+if __name__ == '__main__':
+    x = '1'
+    app = qtw.QApplication(sys.argv)
+
+    window = MainWindow()
+
+    sys.exit(app.exec_())
+
